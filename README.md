@@ -5,7 +5,7 @@
 Mira el proyecto [Aca](https://github.com/JoaquinTemp87/data-stories/tree/master/Data%20cleaning%20-%20Properatti)
 
 ## Web Scrapping y Natural Language processing  @GuiaOleo.com.ar -
-<img src="/assets/09oleo-imagebig.jpg" width="200">
+<img src="/assets/09oleo-imagebig.jpg" width="200"> asdasdasffdzzc ###asdzc
 Mira el proyecto [Aca](https://github.com/JoaquinTemp87/data-stories/tree/master/Web%20Scapping%20-%20GuiaOleo)
 
 
