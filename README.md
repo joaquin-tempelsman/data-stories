@@ -1,6 +1,4 @@
-###### data-stories
-
-#Bienvenidos a Data Stories
+#Data Stories
 
 ##Limpieza y predicción de precios de propiedades CABA - 
 
