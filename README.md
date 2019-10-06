@@ -8,5 +8,5 @@ Mira el proyecto [Aca](https://github.com/JoaquinTemp87/data-stories/tree/master
 ![](/assets/09oleo-imagebig.jpg){:class="img-responsive"}
 Mira el proyecto [Aca](https://github.com/JoaquinTemp87/data-stories/tree/master/Web%20Scapping%20-%20GuiaOleo)
 
-<img src="/assets/09oleo-imagebig.jpg" width="100" height="200">
+<img src="/assets/09oleo-imagebig.jpg" width="50">
 
