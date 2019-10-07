@@ -1,3 +1,3 @@
-###Arboles de clasificación
-En este LAB vamos a modelar un arbol de clasificación usando las librerías de scikit-learn para poder
- predecir la probabilidad de un atáque cardíaco. Usaremos el dataset Heart.csv para entrenar el modelo con 303 pacientes.
+### Arboles de clasificaciÃ³n
+En este LAB vamos a modelar un arbol de clasificaciÃ³n usando las librerÃ­as de scikit-learn para poder
+ predecir la probabilidad de un atÃ¡que cardÃ­aco. Usaremos el dataset Heart.csv para entrenar el modelo con 303 pacientes.
