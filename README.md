@@ -37,3 +37,12 @@ Regresión, utilizaremos el dataset diabetes también de sklearn.
 [*Proyecto*](https://github.com/joaquin-tempelsman/data-stories/tree/master/Clasificacion)
 
 En este LAB vamos a modelar un arbol de clasificación y una versión aumentada con Gridsearch usando las librerías de scikit-learn para poder predecir la probabilidad de un atáque cardíaco. Usaremos el conocido dataset Heart.csv para entrenar el modelo con 303 pacientes.
+
+## Predicción de ventas - desafio Kaggle (in progress)
+[*Proyecto*](https://github.com/joaquin-tempelsman/data-stories/tree/master/Predict%20Sales%20-%20Kaggle)
+
+Pasos a realizar:
+-Análisis exploratorio de los distintos dataset (completado)
+-Armado del dataset principal (completado)
+-Modelo de predicción (pending)
+-Conclusiones (pending)
