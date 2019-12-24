@@ -3,6 +3,25 @@
 Repositorio de Joaquin Tempelsman.
 Located: CABA, Buenos Aires, Argentina. 
 
+
+## Whatsapp group analyzer - insights and graphs 
+[*Proyecto*](https://github.com/joaquin-tempelsman/data-stories/tree/master/Whatsapp%20group%20-%20analytics)
+
+Este proyecto toma el historial de chat exportable desde la aplicación, contruye un dataframe y muestra analytics varios.
+
+Informe:
+Graphs (Seaborn/Bokeh)
+-Serie de tiempo - mensajes por día.
+-Actividad por hora por año. Permite ver las horas de mayor y menor actividad y su variación de cada año.
+-Participación de cada usuario, por año. 
+Tablas:
+-sample de 15 chats con el día más activo. En un caso fue 24 de nov de 2018 (12 veces el promedio diario del grupo), final cancelada de la copa libertadores Boca-River. 
+-top 5 días más activos, promedio diario de mensajes.
+-miembros del grupo que más mensajes multimedia envìaron.
+
+
+La base de chats no esta publicada por cuestiones de privacidad =(
+
 ## Web Scrapping y Natural Language processing  @GuiaOleo.com.ar -
 [*Proyecto*](https://github.com/JoaquinTemp87/data-stories/tree/master/Web%20Scapping%20-%20GuiaOleo)
 
