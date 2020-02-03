@@ -14,9 +14,9 @@ Informe:
 
 Graphs (Seaborn/Bokeh)
 - Serie de tiempo - mensajes por día.
-- Actividad por hora por año. Permite ver como funciona la actividad del grupo en función de la hora del día, segmentado por año.
-- Participación de cada usuario, por año. 
-- Participación de cada usuario general.
+- Actividad por hora por año. Permite ver como funciona la actividad del grupo en función de la hora del día, segmentado por año. (output en notebook)
+- Participación de cada usuario, por año. (output file stacked.html)
+- Participación de cada usuario general. (output file pie.html)
 
 Tablas
 - Sample de chats con el día más activo. En un caso fue 24 de nov de 2018 (12 veces el promedio diario del grupo), final cancelada de la copa libertadores Boca-River. 
@@ -31,7 +31,7 @@ Procedimiento
 
 Obtenemos
 - Lista de palabras más usadas y cantidad de apariciones en la historia del grupo
-- Producimos la nube de palabras
+- Producimos la nube de palabras (output en notebook).
 
 
 nota: La base de chats no esta publicada por cuestiones de privacidad - los miembros saben de su colaboración al proyecto.
