@@ -20,7 +20,7 @@ En base al scoring, el modelo ganador es el que realiza la predicción de ese ca
 [link](https://github.com/joaquin-tempelsman/data-stories/tree/master/transaction%20forecasting%20-%20prophet/production/docs/build)
 
 ![doc_sample_jpg](https://github.com/joaquin-tempelsman/data-stories/blob/master/assets/trx_docs_sample.png)<!-- .element height="30%" width=30%" -->
-
+<img src="https://github.com/joaquin-tempelsman/data-stories/blob/master/assets/trx_docs_sample.png" width="200">
 
 ## Whatsapp group analyzer - Analytics & Wordcloud
 [*Proyecto*](https://github.com/joaquin-tempelsman/data-stories/tree/master/Whatsapp%20group%20-%20analytics)
