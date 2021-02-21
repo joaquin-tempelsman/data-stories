@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>trx_icbc.monitoring_report &mdash; trx_icbc 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> trx_icbc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../trx_icbc.html">Module <code class="docutils literal notranslate"><span class="pre">trx_icbc</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">trx_icbc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>trx_icbc.monitoring_report</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for trx_icbc.monitoring_report</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">listdir</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;trx_main.&#39;</span> <span class="o">+</span> <span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="find_csv_filenames"><a class="viewcode-back" href="../../trx_icbc.html#trx_icbc.monitoring_report.find_csv_filenames">[docs]</a><span class="k">def</span> <span class="nf">find_csv_filenames</span><span class="p">(</span> <span class="n">path_to_dir</span> <span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span> <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get the list of csv files in a given path.</span>
+<span class="sd">        </span>
+<span class="sd">        parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path_to_dir : str</span>
+<span class="sd">            path to predictions folder made in the past</span>
+
+<span class="sd">        suffix : str</span>
+<span class="sd">            suffix of files to find, in this case .csv files</span>
+
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list : list </span>
+<span class="sd">            list with file names</span>
+
+<span class="sd">        </span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	
+    <span class="n">filenames</span> <span class="o">=</span> <span class="n">listdir</span><span class="p">(</span><span class="n">path_to_dir</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span> <span class="n">filename</span> <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span> <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span> <span class="n">suffix</span> <span class="p">)</span> <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="evaluation"><a class="viewcode-back" href="../../trx_icbc.html#trx_icbc.monitoring_report.evaluation">[docs]</a><span class="k">def</span> <span class="nf">evaluation</span><span class="p">(</span><span class="n">data_prep</span><span class="p">,</span><span class="n">path_to_dir</span><span class="p">,</span><span class="n">output_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;imports all the predictions made in the past and cross checks with the real values. </span>
+<span class="sd">    </span>
+<span class="sd">    parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data_prep : dataframe</span>
+<span class="sd">        dataframe output from cross validation function. day to day prediction against real value</span>
+
+<span class="sd">    path_to_dir : str</span>
+<span class="sd">        path to predictions folder made in the past</span>
+
+<span class="sd">    output_path : str</span>
+<span class="sd">        path to save the output of transactions vs prediction monitoring</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>  
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;loading find_csv_filenames function&#39;</span><span class="p">)</span>
+
+
+    
+    <span class="n">all_filenames</span> <span class="o">=</span> <span class="n">find_csv_filenames</span><span class="p">(</span><span class="n">path_to_dir</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;got all csv prediction files from&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">path_to_dir</span><span class="p">))</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;building dataframe pronosticos with predictions&#39;</span><span class="p">)</span>
+    <span class="n">pronosticos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">all_filenames</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;merging file&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_to_dir</span><span class="o">+</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">a</span><span class="p">[</span><span class="s1">&#39;file_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">path_to_dir</span> <span class="o">+</span> <span class="n">file</span><span class="p">)))</span>
+        <span class="n">pronosticos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pronosticos</span><span class="p">,</span> <span class="n">a</span><span class="p">])</span>
+
+    <span class="n">pronosticos</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;file_date&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;donne&#39;</span><span class="p">)</span>
+
+
+    <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">pronosticos</span><span class="o">.</span><span class="n">fecha</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;dataframe pronosticos: merging prediction data with real trx from data_prep&#39;</span><span class="p">)</span>
+    <span class="n">pronosticos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pronosticos</span><span class="p">,</span> <span class="n">data_prep</span><span class="p">[[</span><span class="s1">&#39;y_mobile&#39;</span><span class="p">,</span> <span class="s1">&#39;y_access&#39;</span><span class="p">,</span> <span class="s1">&#39;ds&#39;</span><span class="p">]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span><span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;fecha&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;ds&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">&#39;ds&#39;</span><span class="p">)</span>
+    
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;dataframe pronosticos: formating&#39;</span><span class="p">)</span>
+    <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;mes_año&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;canal&#39;</span><span class="p">]</span>
+    <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;canal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pronosticos</span><span class="o">.</span><span class="n">canal</span><span class="o">.</span><span class="n">str</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;perc_error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pronosticos</span><span class="o">.</span><span class="n">canal</span> <span class="o">==</span> <span class="s1">&#39;AB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">pronosticos</span><span class="o">.</span><span class="n">y_access</span> <span class="o">-</span> <span class="n">pronosticos</span><span class="o">.</span><span class="n">prediccion_trx</span><span class="p">)</span> <span class="o">/</span> <span class="n">pronosticos</span><span class="o">.</span><span class="n">y_access</span> <span class="p">,(</span><span class="n">pronosticos</span><span class="o">.</span><span class="n">y_mobile</span> <span class="o">-</span> <span class="n">pronosticos</span><span class="o">.</span><span class="n">prediccion_trx</span><span class="p">)</span> <span class="o">/</span> <span class="n">pronosticos</span><span class="o">.</span><span class="n">y_mobile</span><span class="p">)</span>
+    <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;SLA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;perc_error&#39;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">0.1</span>
+    <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;SLA_over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;perc_error&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.1</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;dataframe pronosticos: dropping NA values - meaning no real data to cross with prediction&#39;</span><span class="p">)</span>
+    <span class="n">pronosticos</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span> <span class="s1">&#39;any&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;building real trx dataframes for plotting - dropping duplicates, latest predictions for same day kept&#39;</span><span class="p">)</span>
+    <span class="n">AB_real_trx</span> <span class="o">=</span> <span class="n">pronosticos</span><span class="p">[[</span><span class="s1">&#39;y_access&#39;</span><span class="p">,</span><span class="s1">&#39;fecha&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;fecha&#39;</span><span class="p">)</span>
+    <span class="n">MB_real_trx</span> <span class="o">=</span> <span class="n">pronosticos</span><span class="p">[[</span><span class="s1">&#39;y_mobile&#39;</span><span class="p">,</span><span class="s1">&#39;fecha&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;fecha&#39;</span><span class="p">)</span>
+    <span class="n">pronosticos</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">,</span> <span class="s1">&#39;canal&#39;</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;sorting pronosticos dataframe&#39;</span><span class="p">)</span>
+    <span class="n">pronosticos</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;canal&#39;</span><span class="p">,</span> <span class="s1">&#39;fecha&#39;</span><span class="p">])</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;building predictions dataframes by channel - sorted&#39;</span><span class="p">)</span>
+    <span class="n">modelo_AB</span> <span class="o">=</span> <span class="n">pronosticos</span><span class="p">[</span><span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;canal&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;AB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;fecha&#39;</span><span class="p">)</span>
+    <span class="n">modelo_MB</span> <span class="o">=</span> <span class="n">pronosticos</span><span class="p">[</span><span class="n">pronosticos</span><span class="p">[</span><span class="s1">&#39;canal&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;MB&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;fecha&#39;</span><span class="p">)</span>
+
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;grouping results in pronosticos dataframe&#39;</span><span class="p">)</span>
+    <span class="n">group_monitoreo</span> <span class="o">=</span> <span class="n">pronosticos</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;canal&#39;</span><span class="p">,</span> <span class="s1">&#39;mes_año&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">SLA</span> <span class="o">=</span><span class="p">(</span><span class="s1">&#39;SLA&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">),</span> <span class="n">SLA_over</span> <span class="o">=</span><span class="p">(</span><span class="s1">&#39;SLA_over&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">),</span>
+                                   <span class="n">perc_error_median</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;perc_error&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">),</span> <span class="n">cant_predicciones</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;canal&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span> <span class="p">))</span>
+
+    <span class="n">pronosticos</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;prono_table&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+    <span class="n">group_monitoreo</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;group_prono_table&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+    
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;running module: monitoring -&gt; monitoring_plot&#39;</span><span class="p">)</span>
+    <span class="n">monitoring_plot</span><span class="p">(</span><span class="n">AB_real_trx</span> <span class="o">=</span> <span class="n">AB_real_trx</span><span class="p">,</span> <span class="n">MB_real_trx</span> <span class="o">=</span> <span class="n">MB_real_trx</span><span class="p">,</span> <span class="n">modelo_AB</span> <span class="o">=</span> <span class="n">modelo_AB</span><span class="p">,</span> <span class="n">modelo_MB</span> <span class="o">=</span> <span class="n">modelo_MB</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span> <span class="n">output_path</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;module end&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="monitoring_plot"><a class="viewcode-back" href="../../trx_icbc.html#trx_icbc.monitoring_report.monitoring_plot">[docs]</a><span class="k">def</span> <span class="nf">monitoring_plot</span><span class="p">(</span><span class="n">AB_real_trx</span><span class="p">,</span> <span class="n">MB_real_trx</span><span class="p">,</span> <span class="n">modelo_AB</span><span class="p">,</span> <span class="n">modelo_MB</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;plots a linegraph to verify the perfomance of the model against real trx value.</span>
+<span class="sd">    </span>
+<span class="sd">    parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    AB_real_trx : dataframe</span>
+<span class="sd">        dataframe with real AB trx</span>
+
+<span class="sd">    MB_real_trx : dataframe</span>
+<span class="sd">        dataframe with real MB trx</span>
+
+<span class="sd">    modelo_AB : dataframe</span>
+<span class="sd">        dataframe with predicted AB trx</span>
+
+<span class="sd">    modelo_MB : dataframe</span>
+<span class="sd">        dataframe with predicted MB trx</span>
+
+<span class="sd">    output_path : str</span>
+<span class="sd">        path to save the output of transactions vs prediction monitoring</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;adding trace AB models&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">modelo_AB</span><span class="o">.</span><span class="n">fecha</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">modelo_AB</span><span class="o">.</span><span class="n">prediccion_trx</span> <span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Prediccion_AB&#39;</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tweak line smoothness&lt;br&gt;with &#39;smoothing&#39; in line object&quot;</span><span class="p">],</span>
+                        <span class="n">line_shape</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">))</span>
+      
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;adding trace MB models&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">modelo_MB</span><span class="o">.</span><span class="n">fecha</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">modelo_MB</span><span class="o">.</span><span class="n">prediccion_trx</span> <span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Prediccion_MB&#39;</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tweak line smoothness&lt;br&gt;with &#39;smoothing&#39; in line object&quot;</span><span class="p">],</span>
+                        <span class="n">line_shape</span><span class="o">=</span><span class="s1">&#39;spline&#39;</span><span class="p">))</span>
+       
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;building +- 10</span><span class="si">% i</span><span class="s1">ntervals &#39;</span><span class="p">)</span>
+    <span class="n">AB_real_trx</span><span class="p">[</span><span class="s1">&#39;upper_graph&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AB_real_trx</span><span class="o">.</span><span class="n">y_access</span> <span class="o">*</span> <span class="mf">1.1</span>
+    <span class="n">AB_real_trx</span><span class="p">[</span><span class="s1">&#39;lower_graph&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AB_real_trx</span><span class="o">.</span><span class="n">y_access</span> <span class="o">*</span> <span class="mf">0.9</span>
+    <span class="n">MB_real_trx</span><span class="p">[</span><span class="s1">&#39;upper_graph&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MB_real_trx</span><span class="o">.</span><span class="n">y_mobile</span> <span class="o">*</span> <span class="mf">1.1</span>
+    <span class="n">MB_real_trx</span><span class="p">[</span><span class="s1">&#39;lower_graph&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MB_real_trx</span><span class="o">.</span><span class="n">y_mobile</span> <span class="o">*</span> <span class="mf">0.9</span>
+
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;adding trace - real AB&#39;</span><span class="p">)</span>
+    <span class="n">ab_real1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">AB_real_trx</span><span class="o">.</span><span class="n">fecha</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">AB_real_trx</span><span class="o">.</span><span class="n">y_access</span> <span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;trx_reales_AB&#39;</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tweak line smoothness&lt;br&gt;with &#39;smoothing&#39; in line object&quot;</span><span class="p">],</span>
+                         <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;dot&#39;</span><span class="p">)))</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;adding trace - real AB upper interval&#39;</span><span class="p">)</span>
+    <span class="n">ab_real2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">AB_real_trx</span><span class="o">.</span><span class="n">fecha</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">AB_real_trx</span><span class="p">[</span><span class="s1">&#39;upper_graph&#39;</span><span class="p">],</span>
+                                        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;upper_ab&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s1">&#39;tonexty&#39;</span><span class="p">,</span> 
+                                        <span class="n">fillcolor</span><span class="o">=</span><span class="s1">&#39;rgba(60,60,60,0.1)&#39;</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tweak line smoothness&lt;br&gt;with &#39;smoothing&#39; in line object&quot;</span><span class="p">],</span>
+                                        <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;adding trace - real AB lower interval&#39;</span><span class="p">)</span>
+    <span class="n">ab_real2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">AB_real_trx</span><span class="o">.</span><span class="n">fecha</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">AB_real_trx</span><span class="p">[</span><span class="s1">&#39;lower_graph&#39;</span><span class="p">],</span>
+                                        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;lower_ab&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s1">&#39;tonexty&#39;</span><span class="p">,</span> 
+                                        <span class="n">fillcolor</span><span class="o">=</span><span class="s1">&#39;rgba(60,60,60,0.1)&#39;</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tweak line smoothness&lt;br&gt;with &#39;smoothing&#39; in line object&quot;</span><span class="p">],</span>
+                                        <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;adding trace - real MB&#39;</span><span class="p">)</span>
+    <span class="n">mb_real1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">MB_real_trx</span><span class="o">.</span><span class="n">fecha</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">MB_real_trx</span><span class="o">.</span><span class="n">y_mobile</span> <span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;trx_reales_MB&#39;</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tweak line smoothness&lt;br&gt;with &#39;smoothing&#39; in line object&quot;</span><span class="p">],</span>
+                         <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;dot&#39;</span><span class="p">)))</span>
+    
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;adding trace - real MB upper interval&#39;</span><span class="p">)</span>
+    <span class="n">mb_real2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">MB_real_trx</span><span class="o">.</span><span class="n">fecha</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">MB_real_trx</span><span class="p">[</span><span class="s1">&#39;upper_graph&#39;</span><span class="p">],</span>
+                                        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;upper_ab&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s1">&#39;tonexty&#39;</span><span class="p">,</span> 
+                                        <span class="n">fillcolor</span><span class="o">=</span><span class="s1">&#39;rgba(60,60,60,0.1)&#39;</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tweak line smoothness&lt;br&gt;with &#39;smoothing&#39; in line object&quot;</span><span class="p">],</span>
+                                        <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+    
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;adding trace - real MB lower interval&#39;</span><span class="p">)</span>
+    <span class="n">mb_real2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">MB_real_trx</span><span class="o">.</span><span class="n">fecha</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">MB_real_trx</span><span class="p">[</span><span class="s1">&#39;lower_graph&#39;</span><span class="p">],</span>
+                                        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;lower_ab&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s1">&#39;tonexty&#39;</span><span class="p">,</span> 
+                                        <span class="n">fillcolor</span><span class="o">=</span><span class="s1">&#39;rgba(60,60,60,0.1)&#39;</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tweak line smoothness&lt;br&gt;with &#39;smoothing&#39; in line object&quot;</span><span class="p">],</span>
+                                        <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;updating plot extra settings&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;markers+lines&quot;</span><span class="p">,</span> <span class="n">hovertemplate</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;y unified&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">traceorder</span><span class="o">=</span><span class="s1">&#39;reversed&#39;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">13</span><span class="p">))</span>
+    
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;saving plot&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;plot_forecasts_vs_real_monitoring.html&#39;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;saved&#39;</span><span class="p">)</span></div>
+
+       
+
+    
+
+               
+    
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, MIT
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

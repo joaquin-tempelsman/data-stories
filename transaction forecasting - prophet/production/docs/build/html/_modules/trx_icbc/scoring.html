@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>trx_icbc.scoring &mdash; trx_icbc 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> trx_icbc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../trx_icbc.html">Module <code class="docutils literal notranslate"><span class="pre">trx_icbc</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">trx_icbc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>trx_icbc.scoring</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for trx_icbc.scoring</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">date</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;trx_main.&#39;</span> <span class="o">+</span> <span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;getting hypers and regresors - short model&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_model_score"><a class="viewcode-back" href="../../trx_icbc.html#trx_icbc.scoring.get_model_score">[docs]</a><span class="k">def</span> <span class="nf">get_model_score</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">sla_over_scoring</span> <span class="p">,</span> <span class="n">sla_scoring</span>  <span class="p">,</span> <span class="n">perc_error_median_scoring</span> <span class="p">,</span> <span class="n">sla_over_threshold</span><span class="p">,</span><span class="n">long</span> <span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;receives the cross validation output and selects the best model according to score parameters.</span>
+<span class="sd">    </span>
+<span class="sd">    parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    results : dict</span>
+<span class="sd">        dataframe output from cross validation function. day to day prediction against real value</span>
+
+<span class="sd">    sla_over_scoring : int</span>
+<span class="sd">        score gain if model has the best sla_over metric </span>
+
+<span class="sd">    sla_scoring : int</span>
+<span class="sd">        score gain if model has the best sla_scoring metric </span>
+
+<span class="sd">    perc_error_median_scoring : int</span>
+<span class="sd">        score gain if model has the best perc_error_median_scoring metric </span>
+
+<span class="sd">    sla_over_threshold : bool</span>
+<span class="sd">        how much percentage difference is allowed between best sla_over metric model and other models. </span>
+<span class="sd">        if the difference is higher than threshold, the model will be droped out.</span>
+<span class="sd">	</span>
+<span class="sd">	long : bool</span>
+<span class="sd">        passed value from main. If False (default), runs short prediciton scoring. If True, runs long prediction scoring.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    score_ab : dict </span>
+<span class="sd">    	dictionary with the score of each model for ab</span>
+
+<span class="sd">	score_mb : dict </span>
+<span class="sd">    	dictionary with the score of each model for mb</span>
+
+<span class="sd">	</span>
+<span class="sd">	exports csv with grouped results used for scoring models</span>
+<span class="sd">	long prediction  :   csv to predicciones/cv/cv_summary_DATE_long.csv</span>
+<span class="sd">	short prediciton :  csv to predicciones/cv/cv_summary_DATE_short.csv</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>  
+	<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;removing weekends&#39;</span><span class="p">)</span>
+	<span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="p">[(</span><span class="n">results</span><span class="o">.</span><span class="n">sem_dia</span> <span class="o">!=</span> <span class="s1">&#39;Sat&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">sem_dia</span> <span class="o">!=</span> <span class="s1">&#39;Sun&#39;</span><span class="p">)]</span>
+	<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;results - &gt; making cols perc_error and perc_error_over&#39;</span><span class="p">)</span>
+	<span class="n">results</span><span class="p">[</span><span class="s1">&#39;perc_error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;yhat&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+	<span class="n">results</span><span class="p">[</span><span class="s1">&#39;perc_error_over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;yhat&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+	<span class="c1">#results[&#39;perc_error&#39;] = abs(results[&#39;y&#39;] - results[&#39;yhat&#39;]) / results[&#39;y&#39;]</span>
+	<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;results - &gt; making cols SLA and SLA_over&#39;</span><span class="p">)</span>
+	<span class="n">results</span><span class="p">[</span><span class="s1">&#39;SLA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;perc_error&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.1</span>
+	<span class="n">results</span><span class="p">[</span><span class="s1">&#39;SLA_over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;perc_error_over&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.1</span>
+
+	<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;grouping results&#39;</span><span class="p">)</span>
+	<span class="n">group_results</span> <span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">)[</span><span class="s1">&#39;SLA&#39;</span><span class="p">,</span><span class="s1">&#39;perc_error&#39;</span><span class="p">,</span><span class="s1">&#39;SLA_over&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span><span class="s1">&#39;median&#39;</span><span class="p">,</span><span class="s1">&#39;count&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+	<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;making col model set&#39;</span><span class="p">)</span>
+	<span class="n">group_results</span><span class="p">[</span><span class="s1">&#39;model_set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_results</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+	<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;re formating columns&#39;</span><span class="p">)</span>
+	<span class="n">group_results</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">,</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="s1">&#39;SLA_sum&#39;</span><span class="p">,</span><span class="s1">&#39;SLA_median&#39;</span><span class="p">,</span><span class="s1">&#39;SLA_count&#39;</span><span class="p">,</span><span class="s1">&#39;perc_error_sum&#39;</span><span class="p">,</span><span class="s1">&#39;perc_error_median&#39;</span><span class="p">,</span><span class="s1">&#39;perc_error_count&#39;</span><span class="p">,</span><span class="s1">&#39;SLA_over_sum&#39;</span><span class="p">,</span><span class="s1">&#39;SLA_over_median&#39;</span><span class="p">,</span><span class="s1">&#39;SLA_over_count&#39;</span><span class="p">,</span> <span class="s1">&#39;model_set&#39;</span><span class="p">]</span>
+	<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;filtering columns&#39;</span><span class="p">)</span>
+	<span class="n">group_results</span> <span class="o">=</span> <span class="n">group_results</span><span class="p">[[</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="s1">&#39;SLA_sum&#39;</span><span class="p">,</span> <span class="s1">&#39;perc_error_median&#39;</span><span class="p">,</span> <span class="s1">&#39;SLA_over_sum&#39;</span><span class="p">,</span> <span class="s1">&#39;model_set&#39;</span><span class="p">]]</span>
+
+	<span class="k">if</span> <span class="n">long</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+		<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;saving cross validation summary results at&#39;</span> <span class="o">+</span> <span class="s1">&#39;predicciones/cv/cv_summary_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;long.csv&#39;</span><span class="p">)</span>
+		<span class="n">group_results</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;predicciones/cv/cv_summary_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;long.csv&#39;</span><span class="p">)</span> 
+
+	<span class="k">if</span> <span class="n">long</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+		<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;saving cross validation summary results at&#39;</span> <span class="o">+</span> <span class="s1">&#39;predicciones/cv/cv_summary_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;short.csv&#39;</span><span class="p">)</span>
+		<span class="n">group_results</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;predicciones/cv/cv_summary_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;short.csv&#39;</span><span class="p">)</span> 
+
+
+	<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;running func -&gt; scoring_models&#39;</span><span class="p">)</span>
+	<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;getting model score from CV results&#39;</span><span class="p">)</span>
+	<span class="n">score_ab</span> <span class="o">=</span> <span class="n">scoring_models</span><span class="p">(</span><span class="n">group_data</span> <span class="o">=</span><span class="n">group_results</span> <span class="p">,</span><span class="n">channel</span> <span class="o">=</span> <span class="s1">&#39;AB&#39;</span><span class="p">,</span> <span class="n">sla_over_scoring</span><span class="o">=</span> <span class="n">sla_over_scoring</span><span class="p">,</span> <span class="n">sla_scoring</span> <span class="o">=</span> <span class="n">sla_scoring</span> <span class="p">,</span> <span class="n">perc_error_median_scoring</span> <span class="o">=</span> <span class="n">perc_error_median_scoring</span><span class="p">,</span> <span class="n">sla_over_threshold</span> <span class="o">=</span> <span class="n">sla_over_threshold</span><span class="p">)</span>
+	<span class="n">score_mb</span> <span class="o">=</span> <span class="n">scoring_models</span><span class="p">(</span><span class="n">group_data</span> <span class="o">=</span><span class="n">group_results</span> <span class="p">,</span><span class="n">channel</span> <span class="o">=</span> <span class="s1">&#39;MB&#39;</span><span class="p">,</span> <span class="n">sla_over_scoring</span><span class="o">=</span> <span class="n">sla_over_scoring</span><span class="p">,</span> <span class="n">sla_scoring</span> <span class="o">=</span> <span class="n">sla_scoring</span> <span class="p">,</span> <span class="n">perc_error_median_scoring</span> <span class="o">=</span> <span class="n">perc_error_median_scoring</span><span class="p">,</span> <span class="n">sla_over_threshold</span> <span class="o">=</span> <span class="n">sla_over_threshold</span><span class="p">)</span>
+	<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;models score AB:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">score_ab</span><span class="p">))</span>
+	<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;models score MB:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">score_mb</span><span class="p">))</span>
+
+	<span class="k">return</span> <span class="n">score_ab</span><span class="p">,</span> <span class="n">score_mb</span></div>
+	
+
+
+<div class="viewcode-block" id="scoring_models"><a class="viewcode-back" href="../../trx_icbc.html#trx_icbc.scoring.scoring_models">[docs]</a><span class="k">def</span> <span class="nf">scoring_models</span><span class="p">(</span><span class="n">group_data</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">sla_over_scoring</span><span class="p">,</span> <span class="n">sla_scoring</span> <span class="p">,</span> <span class="n">perc_error_median_scoring</span><span class="p">,</span> <span class="n">sla_over_threshold</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;gets the score for each model according to score values received from parameters file.</span>
+<span class="sd">    </span>
+<span class="sd">    parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    group_data : dataframe</span>
+<span class="sd">        dataframe output from cross validation function. day to day prediction against real value</span>
+
+<span class="sd">    channel : str</span>
+<span class="sd">		channel &#39;AB&#39; or &#39;MB&#39; for filtering cv results before scoring</span>
+
+<span class="sd">    sla_over_scoring : int</span>
+<span class="sd">        score gain if model has the best sla_over metric </span>
+
+<span class="sd">    sla_scoring : int</span>
+<span class="sd">        score gain if model has the best sla_scoring metric </span>
+
+<span class="sd">    perc_error_median_scoring : int</span>
+<span class="sd">        score gain if model has the best perc_error_median_scoring metric </span>
+
+<span class="sd">    sla_over_threshold : int</span>
+<span class="sd">        how much percentage difference is allowed between best sla_over metric model and other models. </span>
+<span class="sd">        if the difference is higher than threshold, the model will be droped out.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    puntaje_dict : dict</span>
+<span class="sd">    	dict with the score for each model, for the selected channel.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>  
+
+
+    <span class="n">group_channel</span> <span class="o">=</span> <span class="n">group_data</span><span class="p">[</span><span class="n">group_data</span><span class="p">[</span><span class="s1">&#39;model_set&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">channel</span><span class="p">]</span>
+    
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;getting best metrics from CV results&#39;</span><span class="p">)</span>    
+    <span class="n">max_SLA_value</span> <span class="o">=</span> <span class="n">group_channel</span><span class="p">[</span><span class="s1">&#39;SLA_sum&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">max_SLA_over_value</span> <span class="o">=</span> <span class="n">group_channel</span><span class="p">[</span><span class="s1">&#39;SLA_over_sum&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">min_perc_error_median_value</span> <span class="o">=</span> <span class="n">group_channel</span><span class="p">[</span><span class="s1">&#39;perc_error_median&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;getting models with best metrics&#39;</span><span class="p">)</span>    
+    <span class="n">models_max_sla</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">group_channel</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group_channel</span><span class="p">[</span><span class="s1">&#39;SLA_sum&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">max_SLA_value</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">models_max_sla_over</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">group_channel</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group_channel</span><span class="p">[</span><span class="s1">&#39;SLA_over_sum&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">max_SLA_over_value</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">models_min_perc_error_median</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">group_channel</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group_channel</span><span class="p">[</span><span class="s1">&#39;perc_error_median&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">min_perc_error_median_value</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="n">puntaje_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">group_channel</span><span class="o">.</span><span class="n">model</span><span class="p">:</span>
+        <span class="n">puntaje</span> <span class="o">=</span> <span class="n">models_max_sla</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">sla_over_scoring</span> <span class="o">+</span> <span class="n">models_max_sla_over</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">sla_scoring</span> <span class="o">+</span> <span class="n">models_min_perc_error_median</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">perc_error_median_scoring</span>
+        <span class="n">puntaje_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">puntaje</span>
+
+
+        <span class="k">if</span> <span class="n">sla_over_threshold</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">group_channel</span><span class="p">[</span><span class="n">group_channel</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">SLA_over_sum</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="n">max_SLA_over_value</span><span class="p">:</span>
+            <span class="n">puntaje_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">puntaje</span> <span class="o">-</span> <span class="mi">10</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;SLA_over for model&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; under threshold set at&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sla_over_threshold</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;-&gt; 10 points to score&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">puntaje_dict</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, MIT
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

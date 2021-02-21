@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>trx_icbc.carga_modelo_corto &mdash; trx_icbc 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> trx_icbc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../trx_icbc.html">Module <code class="docutils literal notranslate"><span class="pre">trx_icbc</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">trx_icbc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>trx_icbc.carga_modelo_corto</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for trx_icbc.carga_modelo_corto</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;trx_main.&#39;</span> <span class="o">+</span> <span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="load_regresors_short"><a class="viewcode-back" href="../../trx_icbc.html#trx_icbc.carga_modelo_corto.load_regresors_short">[docs]</a><span class="k">def</span> <span class="nf">load_regresors_short</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;loads pickle files to get list of regresors and hyperparameters for short models</span>
+<span class="sd">         </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    regs_dict : dict </span>
+<span class="sd">        dictionary with regresors data </span>
+
+<span class="sd">    hyper_dict : dict </span>
+<span class="sd">        dictionary with hyperparámeter data     </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;iteration to build reg dict and hyper dict short model - &gt; load pickle files&#39;</span><span class="p">)</span>
+
+    
+    <span class="n">regs_dict</span> <span class="o">=</span>   <span class="p">{</span> <span class="s1">&#39;ab1&#39;</span> <span class="p">:</span>  <span class="s1">&#39;to_load&#39;</span> <span class="p">,</span> <span class="s1">&#39;ab2&#39;</span> <span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span> <span class="s1">&#39;ab3&#39;</span> <span class="p">:</span> <span class="s1">&#39;to_load&#39;</span> <span class="p">,</span><span class="s1">&#39;mb1&#39;</span> <span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span> <span class="s1">&#39;mb2&#39;</span> <span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span> <span class="s1">&#39;mb3&#39;</span> <span class="p">:</span> <span class="s1">&#39;to_load&#39;</span> <span class="p">}</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">regs_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;loading&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;hypers_modelo_10dias/regresores/&quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_regs.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>   <span class="c1"># Unpickling</span>
+            <span class="n">regs_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;loaded&#39;</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;iteration to build hyper dict short - &gt; load pickle files&#39;</span><span class="p">)</span>        
+    
+
+    <span class="n">hyper_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;AB_1&#39;</span><span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span><span class="s1">&#39;AB_1b&#39;</span><span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span><span class="s1">&#39;AB_2&#39;</span><span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span><span class="s1">&#39;AB_3&#39;</span><span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span><span class="s1">&#39;AB_3b&#39;</span><span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span><span class="s1">&#39;MB_1&#39;</span><span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span><span class="s1">&#39;MB_1b&#39;</span><span class="p">:</span><span class="s1">&#39;to_load&#39;</span><span class="p">,</span><span class="s1">&#39;MB_2&#39;</span><span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span><span class="s1">&#39;MB_2b&#39;</span><span class="p">:</span> <span class="s1">&#39;to_load&#39;</span><span class="p">,</span><span class="s1">&#39;MB_3&#39;</span><span class="p">:</span> <span class="s1">&#39;to_load&#39;</span> <span class="p">}</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">hyper_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;loading&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;hypers_modelo_10dias/hiperparametros/&quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_hyper.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>   <span class="c1"># Unpickling</span>
+            <span class="n">hyper_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;loaded&#39;</span><span class="p">)</span>         
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">regs_dict</span><span class="p">,</span> <span class="n">hyper_dict</span></div>
+
+<div class="viewcode-block" id="load_models_short"><a class="viewcode-back" href="../../trx_icbc.html#trx_icbc.carga_modelo_corto.load_models_short">[docs]</a><span class="k">def</span> <span class="nf">load_models_short</span><span class="p">(</span><span class="n">regs_dict</span> <span class="p">,</span><span class="n">hyper_dict</span><span class="p">,</span> <span class="n">datasets</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;prepares a list of dictionaries with data, hyperparámeters, regresors and model name to</span>
+<span class="sd">    iterate with prediction function afterwards</span>
+<span class="sd">    </span>
+<span class="sd">    parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    regs_dict : list</span>
+<span class="sd">        list with regresor used for each model</span>
+
+<span class="sd">    hyper_dict : dict</span>
+<span class="sd">        dictionary with hyperparámeter data for each model</span>
+
+<span class="sd">    datasets : dataframe</span>
+<span class="sd">        dataframe with data for each day</span>
+
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    to_predict_dict_short : dict </span>
+<span class="sd">        dictionary with a list of dictionaries inside with all data for short models</span>
+
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;making short prediction dictionaries for each model&#39;</span><span class="p">)</span>            
+
+    <span class="n">data_hypers_AB_1b</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span><span class="n">datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;hypers&#39;</span><span class="p">:</span><span class="n">hyper_dict</span><span class="p">[</span><span class="s1">&#39;AB_1b&#39;</span><span class="p">],</span> <span class="s1">&#39;name_mod&#39;</span><span class="p">:</span> <span class="s1">&#39;AB_1b&#39;</span><span class="p">,</span> <span class="s1">&#39;regresores&#39;</span><span class="p">:</span><span class="n">regs_dict</span><span class="p">[</span><span class="s1">&#39;ab1&#39;</span><span class="p">]</span>  <span class="p">}</span> 
+    <span class="n">data_hypers_AB_2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span><span class="n">datasets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;hypers&#39;</span><span class="p">:</span><span class="n">hyper_dict</span><span class="p">[</span><span class="s1">&#39;AB_2&#39;</span><span class="p">],</span> <span class="s1">&#39;name_mod&#39;</span><span class="p">:</span> <span class="s1">&#39;AB_2&#39;</span><span class="p">,</span> <span class="s1">&#39;regresores&#39;</span><span class="p">:</span><span class="n">regs_dict</span><span class="p">[</span><span class="s1">&#39;ab2&#39;</span><span class="p">]</span> <span class="p">}</span>
+    <span class="n">data_hypers_AB_3</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span><span class="n">datasets</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;hypers&#39;</span><span class="p">:</span><span class="n">hyper_dict</span><span class="p">[</span><span class="s1">&#39;AB_3&#39;</span><span class="p">],</span> <span class="s1">&#39;name_mod&#39;</span><span class="p">:</span> <span class="s1">&#39;AB_3&#39;</span> <span class="p">,</span> <span class="s1">&#39;regresores&#39;</span><span class="p">:</span><span class="n">regs_dict</span><span class="p">[</span><span class="s1">&#39;ab3&#39;</span><span class="p">]</span> <span class="p">}</span>
+    <span class="n">data_hypers_MB_1b</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span><span class="n">datasets</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;hypers&#39;</span><span class="p">:</span><span class="n">hyper_dict</span><span class="p">[</span><span class="s1">&#39;MB_1b&#39;</span><span class="p">],</span> <span class="s1">&#39;name_mod&#39;</span><span class="p">:</span>  <span class="s1">&#39;MB_1b&#39;</span><span class="p">,</span> <span class="s1">&#39;regresores&#39;</span><span class="p">:</span><span class="n">regs_dict</span><span class="p">[</span><span class="s1">&#39;mb1&#39;</span><span class="p">]</span> <span class="p">}</span>
+    <span class="n">data_hypers_MB_2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span><span class="n">datasets</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;hypers&#39;</span><span class="p">:</span><span class="n">hyper_dict</span><span class="p">[</span><span class="s1">&#39;MB_2&#39;</span><span class="p">],</span> <span class="s1">&#39;name_mod&#39;</span><span class="p">:</span>  <span class="s1">&#39;MB_2&#39;</span><span class="p">,</span> <span class="s1">&#39;regresores&#39;</span><span class="p">:</span> <span class="n">regs_dict</span><span class="p">[</span><span class="s1">&#39;mb2&#39;</span><span class="p">]</span> <span class="p">}</span>
+    <span class="n">data_hypers_MB_3</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span><span class="n">datasets</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;hypers&#39;</span><span class="p">:</span><span class="n">hyper_dict</span><span class="p">[</span><span class="s1">&#39;MB_3&#39;</span><span class="p">]</span> <span class="p">,</span> <span class="s1">&#39;name_mod&#39;</span><span class="p">:</span> <span class="s1">&#39;MB_3&#39;</span><span class="p">,</span> <span class="s1">&#39;regresores&#39;</span><span class="p">:</span> <span class="n">regs_dict</span><span class="p">[</span><span class="s1">&#39;mb3&#39;</span><span class="p">]</span> <span class="p">}</span>
+
+
+
+    <span class="c1">#lista iterable de diccionarios</span>
+    <span class="n">predict_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">data_hypers_AB_1b</span><span class="p">,</span>
+    <span class="n">data_hypers_AB_2</span><span class="p">,</span>
+    <span class="n">data_hypers_AB_3</span><span class="p">,</span>
+    <span class="n">data_hypers_MB_1b</span><span class="p">,</span>
+    <span class="n">data_hypers_MB_2</span><span class="p">,</span>
+    <span class="n">data_hypers_MB_3</span><span class="p">,</span>
+    <span class="n">data_hypers_MB_2</span><span class="p">,</span>
+    <span class="n">data_hypers_MB_3</span>
+    <span class="p">]</span>
+
+    <span class="n">to_predict_dict_short</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">predict_list</span><span class="p">:</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name_mod&#39;</span><span class="p">]</span>
+        <span class="n">to_predict_dict_short</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;dicts done&#39;</span><span class="p">)</span>            
+    <span class="k">return</span> <span class="n">to_predict_dict_short</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, MIT
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,523 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module trx_icbc &mdash; trx_icbc 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to trx_icbc’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> trx_icbc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Module <code class="docutils literal notranslate"><span class="pre">trx_icbc</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">trx_icbc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module <code class="docutils literal notranslate"><span class="pre">trx_icbc</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/trx_icbc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="toctree-wrapper compound">
+</div>
+<div class="section" id="module-trx_icbc.main">
+<span id="module-trx-icbc"></span><h1>Module <code class="docutils literal notranslate"><span class="pre">trx_icbc</span></code><a class="headerlink" href="#module-trx_icbc.main" title="Permalink to this headline">¶</a></h1>
+<p>main.py module description</p>
+<p>module that runs transaction prediction using facebook prophet.</p>
+<p>inputs:
+preprocessed data from rscript module.
+hyper parameter and regresors for each model stored in pickle files</p>
+<p>extra:
+verbosity from prophet PREDICT fit is silenced.</p>
+<dl class="py function">
+<dt id="trx_icbc.main.principal">
+<code class="sig-prename descclassname">trx_icbc.main.</code><code class="sig-name descname">principal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">long</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cv_off</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">multiproc_off</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cv_window</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">100</span></em>, <em class="sig-param"><span class="n">monitoring</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/main.html#principal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.main.principal" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs short prediction (default) or long prediction. outputs saved in /predicciones
+performs cross validation to select best model  of 3 models for each channel</p>
+<p>exports csv files
+csv with prediction to predicciones/entregable/
+csv with prediction detailed data to predicciones/
+csv with cv summary results, optional</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>long</strong> (<em>bool</em>) – changes output to long prediction.</p></li>
+<li><p><strong>paralell</strong> (<em>bool</em>) – cross validation for model selection is done with one core instead of all cores.</p></li>
+<li><p><strong>cv-off</strong> (<em>bool</em>) – cancels cross validation for model selection. Uses best model from previous run.</p></li>
+<li><p><strong>cv_window</strong> (<em>int</em>) – number of days back from last data point, will be used for rolling cross validation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-trx_icbc.ingesta_prep"></span><dl class="py function">
+<dt id="trx_icbc.ingesta_prep.ingesta">
+<code class="sig-prename descclassname">trx_icbc.ingesta_prep.</code><code class="sig-name descname">ingesta</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_prep</span></em>, <em class="sig-param"><span class="n">prediccion_corta</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/ingesta_prep.html#ingesta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.ingesta_prep.ingesta" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets data file and prepares the data for short prediction (default)
+or long prediction and returns dataframe subsets for each model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_prep</strong> (<em>dataframe</em>) – dataframe with data for both channels</p></li>
+<li><p><strong>prediccion_corta</strong> (<em>bool</em>) – If true, the data will be prepared for short prediction model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>AB2_data</strong> (<em>dataframe</em>) – dataframe with AB channel data for model input</p></li>
+<li><p><strong>AB1_data</strong> (<em>dataframe</em>) – dataframe with AB channel data for model input</p></li>
+<li><p><strong>AB3_data</strong> (<em>dataframe</em>) – dataframe with AB channel data for model input</p></li>
+<li><p><strong>MB3_data</strong> (<em>dataframe</em>) – dataframe with MB channel data for model input</p></li>
+<li><p><strong>MB2_data</strong> (<em>dataframe</em>) – dataframe with MB channel data for model input</p></li>
+<li><p><strong>MB1_data</strong> (<em>dataframe</em>) – dataframe with MB channel data for model input</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-trx_icbc.carga_modelo_corto"></span><dl class="py function">
+<dt id="trx_icbc.carga_modelo_corto.load_regresors_short">
+<code class="sig-prename descclassname">trx_icbc.carga_modelo_corto.</code><code class="sig-name descname">load_regresors_short</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/carga_modelo_corto.html#load_regresors_short"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.carga_modelo_corto.load_regresors_short" title="Permalink to this definition">¶</a></dt>
+<dd><p>loads pickle files to get list of regresors and hyperparameters for short models</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>regs_dict</strong> (<em>dict</em>) – dictionary with regresors data</p></li>
+<li><p><strong>hyper_dict</strong> (<em>dict</em>) – dictionary with hyperparámeter data</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="trx_icbc.carga_modelo_corto.load_models_short">
+<code class="sig-prename descclassname">trx_icbc.carga_modelo_corto.</code><code class="sig-name descname">load_models_short</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">regs_dict</span></em>, <em class="sig-param"><span class="n">hyper_dict</span></em>, <em class="sig-param"><span class="n">datasets</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/carga_modelo_corto.html#load_models_short"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.carga_modelo_corto.load_models_short" title="Permalink to this definition">¶</a></dt>
+<dd><p>prepares a list of dictionaries with data, hyperparámeters, regresors and model name to
+iterate with prediction function afterwards</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>regs_dict</strong> (<em>list</em>) – list with regresor used for each model</p></li>
+<li><p><strong>hyper_dict</strong> (<em>dict</em>) – dictionary with hyperparámeter data for each model</p></li>
+<li><p><strong>datasets</strong> (<em>dataframe</em>) – dataframe with data for each day</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>to_predict_dict_short</strong> – dictionary with a list of dictionaries inside with all data for short models</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-trx_icbc.carga_modelo_largo"></span><dl class="py function">
+<dt id="trx_icbc.carga_modelo_largo.load_regresors_long">
+<code class="sig-prename descclassname">trx_icbc.carga_modelo_largo.</code><code class="sig-name descname">load_regresors_long</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/carga_modelo_largo.html#load_regresors_long"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.carga_modelo_largo.load_regresors_long" title="Permalink to this definition">¶</a></dt>
+<dd><p>loads pickle files to get list of regresors and hyperparameters for long models</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>regs_long_ab</strong> (<em>dict</em>) – regresors for long ab model</p></li>
+<li><p><strong>regs_longs_mb</strong> (<em>dict</em>) – regresors for long mb model</p></li>
+<li><p><strong>hyper_dict_long</strong> (<em>dict</em>) – hiperparámeter dict with values for each long model</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="trx_icbc.carga_modelo_largo.load_models_long">
+<code class="sig-prename descclassname">trx_icbc.carga_modelo_largo.</code><code class="sig-name descname">load_models_long</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">regs_long_ab</span></em>, <em class="sig-param"><span class="n">regs_longs_mb</span></em>, <em class="sig-param"><span class="n">hyper_dict_long</span></em>, <em class="sig-param"><span class="n">datasets</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/carga_modelo_largo.html#load_models_long"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.carga_modelo_largo.load_models_long" title="Permalink to this definition">¶</a></dt>
+<dd><p>prepares a list of dictionaries with data, hyperparámeters, regresors and model name to
+iterate with prediction function afterwards</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>regs_long_ab</strong> (<em>list</em>) – list with regresor used for each model for mb channel</p></li>
+<li><p><strong>regs_longs_mb</strong> (<em>list</em>) – list with regresor used for each model for mb channel</p></li>
+<li><p><strong>hyper_dict_long</strong> (<em>dict</em>) – dictionary with hyperparámeter data</p></li>
+<li><p><strong>datasets</strong> (<em>dataframe</em>) – dataframe with data for each day</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>to_predict_dict_long</strong> – dictionary with a list of dictionaries inside with all data for long models</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-trx_icbc.cv"></span><dl class="py class">
+<dt id="trx_icbc.cv.suppress_stdout_stderr">
+<em class="property">class </em><code class="sig-prename descclassname">trx_icbc.cv.</code><code class="sig-name descname">suppress_stdout_stderr</code><a class="reference internal" href="_modules/trx_icbc/cv.html#suppress_stdout_stderr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.cv.suppress_stdout_stderr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class to silence prophet output during prediction and cv.
+A context manager for doing a “deep suppression” of stdout and stderr in
+Python, i.e. will suppress all print</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="trx_icbc.cv.massive_prediction_cv">
+<code class="sig-prename descclassname">trx_icbc.cv.</code><code class="sig-name descname">massive_prediction_cv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">initial_forecast_date</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">hyperparams</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">regs</span></em>, <em class="sig-param"><span class="n">paralell</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/cv.html#massive_prediction_cv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.cv.massive_prediction_cv" title="Permalink to this definition">¶</a></dt>
+<dd><p>fits model and outputs a dataframe with validation results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_forecast_date</strong> (<em>int</em>) – period to use to run cross validation. time delta = days</p></li>
+<li><p><strong>data</strong> (<em>dataframe</em>) – dataframe with data for each day</p></li>
+<li><p><strong>hyperparams</strong> (<em>dict</em>) – dictionary with values for each hyperparámeter</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – name fo the model</p></li>
+<li><p><strong>regs</strong> (<em>list</em>) – list with regresors to use in prediction</p></li>
+<li><p><strong>paralell</strong> (<em>bool</em>) – if FALSE, cross validation for model selection is done with one core instead of all cores (default).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df_cv</strong> – dataframe with validated day to day data between prediction and actual value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="trx_icbc.cv.cv_iteration">
+<code class="sig-prename descclassname">trx_icbc.cv.</code><code class="sig-name descname">cv_iteration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">to_predict_dict_short</span></em>, <em class="sig-param"><span class="n">to_predict_dict_long</span></em>, <em class="sig-param"><span class="n">long</span></em>, <em class="sig-param"><span class="n">multiproc_off</span></em>, <em class="sig-param"><span class="n">cv_window</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/cv.html#cv_iteration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.cv.cv_iteration" title="Permalink to this definition">¶</a></dt>
+<dd><p>iterates the model lists and runs prediction for each model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>to_predict_dict_short</strong> (<em>dict</em>) – dictionary with data, hyperparameters, model name and regresors for each short prediction model.</p></li>
+<li><p><strong>to_predict_dict_long</strong> (<em>dict</em>) – dictionary with data, hyperparameters, model name and regresors for each long prediction model.</p></li>
+<li><p><strong>long</strong> (<em>bool</em>) – passed value from main. If False (default), runs short prediciton. If True, runs long prediction.</p></li>
+<li><p><strong>multiproc_off</strong> (<em>bool</em>) – if FALSE, cross validation is done with all cores (default), instead of one core.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cv_result</strong> – dataframe with validated day to day data for all models appended in one table</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-trx_icbc.scoring"></span><dl class="py function">
+<dt id="trx_icbc.scoring.get_model_score">
+<code class="sig-prename descclassname">trx_icbc.scoring.</code><code class="sig-name descname">get_model_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">results</span></em>, <em class="sig-param"><span class="n">sla_over_scoring</span></em>, <em class="sig-param"><span class="n">sla_scoring</span></em>, <em class="sig-param"><span class="n">perc_error_median_scoring</span></em>, <em class="sig-param"><span class="n">sla_over_threshold</span></em>, <em class="sig-param"><span class="n">long</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/scoring.html#get_model_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.scoring.get_model_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>receives the cross validation output and selects the best model according to score parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results</strong> (<em>dict</em>) – dataframe output from cross validation function. day to day prediction against real value</p></li>
+<li><p><strong>sla_over_scoring</strong> (<em>int</em>) – score gain if model has the best sla_over metric</p></li>
+<li><p><strong>sla_scoring</strong> (<em>int</em>) – score gain if model has the best sla_scoring metric</p></li>
+<li><p><strong>perc_error_median_scoring</strong> (<em>int</em>) – score gain if model has the best perc_error_median_scoring metric</p></li>
+<li><p><strong>sla_over_threshold</strong> (<em>bool</em>) – <p>how much percentage difference is allowed between best sla_over metric model and other models.
+if the difference is higher than threshold, the model will be droped out.</p>
+<p>long : bool
+passed value from main. If False (default), runs short prediciton scoring. If True, runs long prediction scoring.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>score_ab</strong> – dictionary with the score of each model for ab</p>
+<p>score_mb : dict
+dictionary with the score of each model for mb</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><p>dict</p>
+<p>exports csv with grouped results used for scoring models
+long prediction  :   csv to predicciones/cv/cv_summary_DATE_long.csv
+short prediciton :  csv to predicciones/cv/cv_summary_DATE_short.csv</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="trx_icbc.scoring.scoring_models">
+<code class="sig-prename descclassname">trx_icbc.scoring.</code><code class="sig-name descname">scoring_models</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">group_data</span></em>, <em class="sig-param"><span class="n">channel</span></em>, <em class="sig-param"><span class="n">sla_over_scoring</span></em>, <em class="sig-param"><span class="n">sla_scoring</span></em>, <em class="sig-param"><span class="n">perc_error_median_scoring</span></em>, <em class="sig-param"><span class="n">sla_over_threshold</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/scoring.html#scoring_models"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.scoring.scoring_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the score for each model according to score values received from parameters file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group_data</strong> (<em>dataframe</em>) – dataframe output from cross validation function. day to day prediction against real value</p></li>
+<li><p><strong>channel</strong> (<em>str</em>) – channel ‘AB’ or ‘MB’ for filtering cv results before scoring</p></li>
+<li><p><strong>sla_over_scoring</strong> (<em>int</em>) – score gain if model has the best sla_over metric</p></li>
+<li><p><strong>sla_scoring</strong> (<em>int</em>) – score gain if model has the best sla_scoring metric</p></li>
+<li><p><strong>perc_error_median_scoring</strong> (<em>int</em>) – score gain if model has the best perc_error_median_scoring metric</p></li>
+<li><p><strong>sla_over_threshold</strong> (<em>int</em>) – how much percentage difference is allowed between best sla_over metric model and other models.
+if the difference is higher than threshold, the model will be droped out.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>puntaje_dict</strong> – dict with the score for each model, for the selected channel.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-trx_icbc.iter_predict"></span><dl class="py function">
+<dt id="trx_icbc.iter_predict.predict">
+<code class="sig-prename descclassname">trx_icbc.iter_predict.</code><code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">to_predict_dict_short</span></em>, <em class="sig-param"><span class="n">to_predict_dict_long</span></em>, <em class="sig-param"><span class="n">long</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/iter_predict.html#predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.iter_predict.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>iterates the dictionaries into the prediction functions and exports csv prediction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>to_predict_dict_short</strong> (<em>dict</em>) – dictionary with data, hyperparameters, model name and regresors for each short prediction model.</p></li>
+<li><p><strong>to_predict_dict_long</strong> (<em>dict</em>) – dictionary with data, hyperparameters, model name and regresors for each long prediction model.</p></li>
+<li><p><strong>long</strong> (<em>bool</em>) – passed value from main. If False (default), runs short prediciton. If True, runs long prediction.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-trx_icbc.monitoring_report"></span><dl class="py function">
+<dt id="trx_icbc.monitoring_report.find_csv_filenames">
+<code class="sig-prename descclassname">trx_icbc.monitoring_report.</code><code class="sig-name descname">find_csv_filenames</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path_to_dir</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="o">=</span><span class="default_value">'.csv'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/monitoring_report.html#find_csv_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.monitoring_report.find_csv_filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the list of csv files in a given path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_to_dir</strong> (<em>str</em>) – path to predictions folder made in the past</p></li>
+<li><p><strong>suffix</strong> (<em>str</em>) – suffix of files to find, in this case .csv files</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>list</strong> – list with file names</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="trx_icbc.monitoring_report.evaluation">
+<code class="sig-prename descclassname">trx_icbc.monitoring_report.</code><code class="sig-name descname">evaluation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_prep</span></em>, <em class="sig-param"><span class="n">path_to_dir</span></em>, <em class="sig-param"><span class="n">output_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/monitoring_report.html#evaluation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.monitoring_report.evaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>imports all the predictions made in the past and cross checks with the real values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_prep</strong> (<em>dataframe</em>) – dataframe output from cross validation function. day to day prediction against real value</p></li>
+<li><p><strong>path_to_dir</strong> (<em>str</em>) – path to predictions folder made in the past</p></li>
+<li><p><strong>output_path</strong> (<em>str</em>) – path to save the output of transactions vs prediction monitoring</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="trx_icbc.monitoring_report.monitoring_plot">
+<code class="sig-prename descclassname">trx_icbc.monitoring_report.</code><code class="sig-name descname">monitoring_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">AB_real_trx</span></em>, <em class="sig-param"><span class="n">MB_real_trx</span></em>, <em class="sig-param"><span class="n">modelo_AB</span></em>, <em class="sig-param"><span class="n">modelo_MB</span></em>, <em class="sig-param"><span class="n">output_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/trx_icbc/monitoring_report.html#monitoring_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#trx_icbc.monitoring_report.monitoring_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plots a linegraph to verify the perfomance of the model against real trx value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>AB_real_trx</strong> (<em>dataframe</em>) – dataframe with real AB trx</p></li>
+<li><p><strong>MB_real_trx</strong> (<em>dataframe</em>) – dataframe with real MB trx</p></li>
+<li><p><strong>modelo_AB</strong> (<em>dataframe</em>) – dataframe with predicted AB trx</p></li>
+<li><p><strong>modelo_MB</strong> (<em>dataframe</em>) – dataframe with predicted MB trx</p></li>
+<li><p><strong>output_path</strong> (<em>str</em>) – path to save the output of transactions vs prediction monitoring</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to trx_icbc’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, MIT
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+variable,val
+sla_over_scoring,0.4
+sla_scoring,0.3
+perc_error_median_scoring,0.15
+sla_over_threshold,0.075
+input_path_data_prep_csv,../../data/raw/
